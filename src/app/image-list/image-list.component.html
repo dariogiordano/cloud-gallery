@@ -1,0 +1,4 @@
+<div *ngIf="list$ | async as list; else loading">
+	<div *ngFor="let item of list"><img [src]=" item.thumbUrl" /></div>
+  </div>
+  <ng-template #loading>Loading...</ng-template>
