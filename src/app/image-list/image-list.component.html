@@ -1,14 +1,17 @@
 
   
   <ng-template #loading><div class="loader-container"><mat-spinner></mat-spinner></div></ng-template>
-  <div *ngIf="(!(loadingList$ | async)); else loading" >
+  <div *ngIf="(!(loadingList$ | async) || hasScrolled); else loading" >
   <ng-template #empty>Empty...</ng-template>
 
 
 
-  <mat-grid-list [cols]="columnNumber" rowHeight="1:1" *ngIf="(list$ | async); else empty">
+  <mat-grid-list  infiniteScroll
+  [infiniteScrollDistance]="0.5"
+  [infiniteScrollThrottle]="100"
+  (scrolled)="onScroll()" [cols]="columnNumber" rowHeight="1:1" *ngIf="(list$ | async); else empty">
 	<mat-grid-tile *ngFor="let item of list$ | async"><img class="list-item" [src]=" item.thumbUrl" /></mat-grid-tile>
-	
+	<mat-grid-tile *ngIf="(loadingList$ |async) && hasScrolled"><mat-spinner></mat-spinner></mat-grid-tile>
   </mat-grid-list>
   </div>
 

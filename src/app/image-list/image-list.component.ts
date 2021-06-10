@@ -6,6 +6,7 @@ export interface imageListItem {
   thumbUrl: string;
   imageUrl: string;
   title: string;
+  next: string;
 }
 
 @Component({
@@ -32,7 +33,7 @@ export class ImageListComponent implements OnInit {
     this.list$ = this._service.imageList$;
     this.loadingList$ = this._service.loadingList$;
     this.changeColumnNumber(
-      Math.floor(this._ruler.getViewportSize().width / 200)
+      Math.floor(this._ruler.getViewportSize().width / 150)
     );
     this._service.getCloudImages(!this.hasScrolled, this.columnNumber * 8);
   }
@@ -42,13 +43,21 @@ export class ImageListComponent implements OnInit {
   }
 
   onWindowResize(event: any) {
-    clearTimeout(this.resizeTimeout);
-    this._service.setLoadingList(true);
-    this.changeColumnNumber(Math.floor(event.target.innerWidth / 200));
-    this.resizeTimeout = setTimeout(
-      () =>
-        this._service.getCloudImages(!this.hasScrolled, this.columnNumber * 8),
-      500
-    );
+    const previousColumnNumber = this.columnNumber;
+
+    this.changeColumnNumber(Math.floor(event.target.innerWidth / 150));
+    if (this.columnNumber !== previousColumnNumber && !this.hasScrolled) {
+      this._service.setLoadingList(true);
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(
+        () => this._service.getCloudImages(true, this.columnNumber * 8),
+        500
+      );
+    }
+  }
+
+  onScroll() {
+    this.hasScrolled = true;
+    this._service.getCloudImages(!this.hasScrolled, this.columnNumber * 8);
   }
 }
