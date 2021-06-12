@@ -1,0 +1,32 @@
+.mat-icon,
+.mat-icon-button {
+  font-size: 50px;
+  display: block;
+  height: 50px;
+  width: 50px;
+}
+
+.mat-icon-button i,
+.mat-icon-button,
+.mat-icon-button .mat-icon {
+  line-height: 50px;
+}
+
+.back-button {
+  margin-left: auto;
+}
+
+.image-container {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .image-wrapper {
+    .image-content {
+      height: calc(100vh - 150px);
+      width: calc(100vw - 100px);
+      object-fit: contain;
+      filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
+    }
+  }
+}

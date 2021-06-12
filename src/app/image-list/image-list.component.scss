@@ -1,6 +1,13 @@
-.loader-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+.image-container {
+  display: block;
+  height: 80%;
+  overflow: hidden;
+  width: 80%;
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  border: solid 5px white;
+  .list-item {
+    margin: auto;
+    height: 100%;
+    object-fit: contain;
+  }
 }

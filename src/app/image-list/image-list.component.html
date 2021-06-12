@@ -1,17 +1,13 @@
 
-  
-  <ng-template #loading><div class="loader-container"><mat-spinner></mat-spinner></div></ng-template>
-  <div *ngIf="(!(loadingList$ | async) || hasScrolled); else loading" >
+<ng-template #loading><app-page-loader></app-page-loader></ng-template>
+<div *ngIf="(!(loadingList$ | async) || hasScrolled); else loading" >
+
   <ng-template #empty>Empty...</ng-template>
-
-
-
-  <mat-grid-list  infiniteScroll
-  [infiniteScrollDistance]="0.5"
+  <mat-grid-list infiniteScroll
+  [infiniteScrollDistance]="1"
   [infiniteScrollThrottle]="100"
   (scrolled)="onScroll()" [cols]="columnNumber" rowHeight="1:1" *ngIf="(list$ | async); else empty">
-	<mat-grid-tile *ngFor="let item of list$ | async"><img class="list-item" [src]=" item.thumbUrl" /></mat-grid-tile>
-	<mat-grid-tile *ngIf="(loadingList$ |async) && hasScrolled"><mat-spinner></mat-spinner></mat-grid-tile>
+    <mat-grid-tile *ngFor="let item of list$ | async"><a class="image-container" [routerLink]="['/dialog',item.id]" appMaterialElevation [defaultElevation]=0 [raisedElevation]=4><img class="list-item" [src]="item.thumbUrl" (error)="onImgError($event)" /></a></mat-grid-tile>
+    <mat-grid-tile *ngIf="(loadingList$ |async) && hasScrolled"><mat-spinner></mat-spinner></mat-grid-tile>
   </mat-grid-list>
-  </div>
-
+</div>

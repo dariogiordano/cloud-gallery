@@ -1,0 +1,14 @@
+<ng-template #loading><app-page-loader></app-page-loader></ng-template>
+<div *ngIf="(imageDetails$ | async) as imageDetails; else loading">
+	<mat-toolbar>
+		<button  matTooltip="Back to gallery" routerLink="/image-list" mat-icon-button color="primary" >
+			<mat-icon class="back-button">arrow_back</mat-icon>
+		</button>
+		<h4 class="back-button">{{imageDetails.title}}</h4>
+	</mat-toolbar>
+	<div class="image-container">
+		<div class="image-wrapper">
+		<img class="image-content"  [src]="imageDetails.imageUrl" (error)="onImgError($event)" />
+	</div>	
+	</div>
+</div>

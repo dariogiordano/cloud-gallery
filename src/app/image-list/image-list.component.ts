@@ -1,12 +1,23 @@
-import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { ImageListService } from './image-list.service';
 import { ViewportRuler } from '@angular/cdk/scrolling';
+import { ViewportScroller } from '@angular/common';
 export interface imageListItem {
   thumbUrl: string;
   imageUrl: string;
   title: string;
-  next: string;
+  id: string;
+  nextId?: string;
+  prevId?: string;
 }
 
 @Component({
@@ -17,8 +28,7 @@ export interface imageListItem {
     '(window:resize)': 'onWindowResize($event)',
   },
 })
-export class ImageListComponent implements OnInit {
-  private _rulerSubscription: Subscription | undefined = undefined;
+export class ImageListComponent implements OnInit, OnDestroy {
   columnNumber: number = 0;
   hasScrolled = false;
   list$ = new Observable<imageListItem[]>();
@@ -26,16 +36,40 @@ export class ImageListComponent implements OnInit {
   resizeTimeout: any;
   constructor(
     private _service: ImageListService,
-    private _ruler: ViewportRuler
+    private _ruler: ViewportRuler,
+    private _viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit(): void {
     this.list$ = this._service.imageList$;
     this.loadingList$ = this._service.loadingList$;
+
     this.changeColumnNumber(
       Math.floor(this._ruler.getViewportSize().width / 150)
     );
-    this._service.getCloudImages(!this.hasScrolled, this.columnNumber * 8);
+    this._service.getCloudImages(
+      !this.hasScrolled,
+      this.columnNumber * 8,
+      true
+    );
+  }
+
+  ngAfterViewInit() {
+    if (this._service.scrollOffset[1] > 0) {
+      setTimeout(() => {
+        console.log(this._viewportScroller.getScrollPosition());
+        this._viewportScroller.scrollToPosition(this._service.scrollOffset);
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    console.log(this._viewportScroller.getScrollPosition());
+    this._service.scrollOffset = this._viewportScroller.getScrollPosition();
+  }
+
+  onImgError(event: any) {
+    event.target.src = '../../assets/sad404.svg';
   }
 
   changeColumnNumber(num: number) {
@@ -50,7 +84,7 @@ export class ImageListComponent implements OnInit {
       this._service.setLoadingList(true);
       clearTimeout(this.resizeTimeout);
       this.resizeTimeout = setTimeout(
-        () => this._service.getCloudImages(true, this.columnNumber * 8),
+        () => this._service.getCloudImages(true, this.columnNumber * 8, false),
         500
       );
     }
@@ -58,6 +92,11 @@ export class ImageListComponent implements OnInit {
 
   onScroll() {
     this.hasScrolled = true;
-    this._service.getCloudImages(!this.hasScrolled, this.columnNumber * 8);
+
+    this._service.getCloudImages(
+      !this.hasScrolled,
+      this.columnNumber * 8,
+      false
+    );
   }
 }
