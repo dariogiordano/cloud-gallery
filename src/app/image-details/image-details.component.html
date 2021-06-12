@@ -4,11 +4,18 @@
 		<button  matTooltip="Back to gallery" routerLink="/image-list" mat-icon-button color="primary" >
 			<mat-icon class="back-button">arrow_back</mat-icon>
 		</button>
-		<h4 class="back-button">{{imageDetails.title}}</h4>
+		
+		<h4 class="back-button">{{imageDetails.title}}</h4> 
 	</mat-toolbar>
 	<div class="image-container">
+		<button matTooltip="PREV" [disabled]="!prevId" [routerLink]="['/dialog',prevId]" mat-icon-button color="primary" >
+			<mat-icon class="back-button">arrow_back_ios</mat-icon>
+		</button>
 		<div class="image-wrapper">
-		<img class="image-content"  [src]="imageDetails.imageUrl" (error)="onImgError($event)" />
-	</div>	
+			<img class="image-content"  [src]="imageDetails.imageUrl" (error)="onImgError($event)" />
+		</div>
+		<button matTooltip="NEXT" [disabled]="!nextId" [routerLink]="['/dialog',nextId]" mat-icon-button color="primary" >
+			<mat-icon class="back-button">arrow_forward_ios</mat-icon>
+		</button>
 	</div>
 </div>

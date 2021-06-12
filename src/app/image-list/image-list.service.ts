@@ -66,17 +66,16 @@ export class ImageListService {
             thumbUrl: resItem.data.thumbnail,
             title: resItem.data.title,
             id: resItem.data.id,
-            nextId:
-              i >= filteredlist.length - 2 ? null : filteredlist[i + 1].data.id,
-            prevId: i === 0 ? null : filteredlist[i - 1].data.id,
           };
           return listItem;
         }
       );
       if (isReset) this._imageList$.next(imagelist);
-      else this._imageList$.next([...this._imageList$.value, ...imagelist]);
+      else {
+        //TODO: aggungere il prev e il next al primo di imagelist e all'ultimo di  _imageList$
+        this._imageList$.next([...this._imageList$.value, ...imagelist]);
+      }
       this._intLoadingState = false;
-      console.log(imagelist);
       this._loadingList$.next(false);
     });
   }

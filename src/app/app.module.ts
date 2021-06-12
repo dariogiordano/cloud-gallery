@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  HammerModule,
+  HAMMER_LOADER,
+} from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +39,7 @@ import { MatCardModule } from '@angular/material/card';
     HttpClientModule,
     MatGridListModule,
     InfiniteScrollModule,
+    HammerModule,
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
@@ -42,7 +47,14 @@ import { MatCardModule } from '@angular/material/card';
     MatTooltipModule,
     MatCardModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HAMMER_LOADER,
+      useValue: async () => {
+        return import('hammerjs');
+      },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

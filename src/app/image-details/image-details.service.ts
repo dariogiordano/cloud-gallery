@@ -42,4 +42,8 @@ export class ImageDetailsService {
   get imageDetails$() {
     return this._imageDetails$.asObservable();
   }
+
+  unsetImageDetails() {
+    this._imageDetails$.next(undefined);
+  }
 }

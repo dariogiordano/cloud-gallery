@@ -16,8 +16,6 @@ export interface imageListItem {
   imageUrl: string;
   title: string;
   id: string;
-  nextId?: string;
-  prevId?: string;
 }
 
 @Component({
@@ -57,14 +55,12 @@ export class ImageListComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     if (this._service.scrollOffset[1] > 0) {
       setTimeout(() => {
-        console.log(this._viewportScroller.getScrollPosition());
         this._viewportScroller.scrollToPosition(this._service.scrollOffset);
       });
     }
   }
 
   ngOnDestroy() {
-    console.log(this._viewportScroller.getScrollPosition());
     this._service.scrollOffset = this._viewportScroller.getScrollPosition();
   }
 
