@@ -1,12 +1,12 @@
 
 <ng-template #loading><app-page-loader></app-page-loader></ng-template>
 <ng-template #clearSearchTemplate>
-  <mat-toolbar>
-		<h6 class="back-button">Searching keyword "{{searchParameters.filterValue}}"</h6> 
+  <div class="clear-search-container">
     <button matTooltip="Clear search" (click)="clearSearch()" mat-icon-button color="primary" >
       <mat-icon class="back-button">clear</mat-icon>
     </button>
-	</mat-toolbar>
+    <p >Searching keyword "{{searchParameters.filterValue}}"</p> 
+	</div>
 </ng-template>
 <div *ngIf="(!(loadingList$ | async) || hasScrolled); else loading" >
   <ng-template #empty><div class="empty-container">Nothing found (sorry).</div></ng-template>

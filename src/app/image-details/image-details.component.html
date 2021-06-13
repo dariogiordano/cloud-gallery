@@ -1,21 +1,26 @@
 <ng-template #loading><app-page-loader></app-page-loader></ng-template>
 <div *ngIf="(imageDetails$ | async) as imageDetails; else loading">
-	<mat-toolbar>
-		<button  matTooltip="Back to gallery" routerLink="/image-list" mat-icon-button color="primary" >
-			<mat-icon class="back-button">arrow_back</mat-icon>
+	<div class="button-container" >
+		<button matTooltip="Back to gallery" routerLink="/image-list" mat-icon-button color="primary" >
+			<mat-icon >arrow_back</mat-icon>
 		</button>
-		
-		<h6 class="back-button">{{imageDetails.title}}</h6> 
-	</mat-toolbar>
-	<div class="image-container">
-		<button class="nav-button" matTooltip="PREV" [disabled]="!prevId" [routerLink]="['/dialog',prevId]" mat-icon-button color="primary" >
-			<mat-icon class="back-button">arrow_back_ios</mat-icon>
-		</button>
-		<div class="image-wrapper">
-			<img class="image-content"  [src]="imageDetails.imageUrl" (error)="onImgError($event)" />
+		<div class="nav-button-container">
+			<button class="nav-button" matTooltip="PREV" [disabled]="!prevId" [routerLink]="['/dialog',prevId]" mat-icon-button color="primary" >
+				<mat-icon class="back-button">arrow_back_ios</mat-icon>
+			</button>
+			<button  class="nav-button" matTooltip="NEXT" [disabled]="!nextId" [routerLink]="['/dialog',nextId]" mat-icon-button color="primary" >
+				<mat-icon class="back-button">arrow_forward_ios</mat-icon>
+			</button>
 		</div>
-		<button  class="nav-button" matTooltip="NEXT" [disabled]="!nextId" [routerLink]="['/dialog',nextId]" mat-icon-button color="primary" >
-			<mat-icon class="back-button">arrow_forward_ios</mat-icon>
-		</button>
+		
+	</div>
+	<div class="image-container">
+		<div class="image-wrapper">
+			<img class="image-content" [src]="imageDetails.imageUrl" (error)="onImgError($event)" />
+		</div>
+		
+	</div>
+	<div class="caption-container">
+		<p class="caption">{{imageDetails.title}}</p> 
 	</div>
 </div>

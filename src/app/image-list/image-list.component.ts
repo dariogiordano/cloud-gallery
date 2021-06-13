@@ -111,6 +111,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   onWindowResize(event: any) {
+    this._service.setLoadingList(true);
     this.changeColumnNumber(Math.floor(event.target.innerWidth / 150));
     if (
       this.columnNumber > this.largestColumnNumber &&
@@ -118,13 +119,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
       !this.searchParameters.allFound
     ) {
       this.largestColumnNumber = this.columnNumber;
-      this._service.setLoadingList(true);
+
       clearTimeout(this.resizeTimeout);
       this.resizeTimeout = setTimeout(
         () => this._service.getCloudImages(true, this.columnNumber * 7, false),
         500
       );
-    }
+    } else this._service.setLoadingList(false);
   }
 
   onScroll() {
