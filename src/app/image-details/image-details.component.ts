@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap, RouterEvent } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { concatMap, filter } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 import { ImageListItem } from '../image-list/image-list.component';
 import { ImageListService } from '../image-list/image-list.service';
 import { ImageDetailsService } from './image-details.service';

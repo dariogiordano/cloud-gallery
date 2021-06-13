@@ -12,13 +12,11 @@
 				<mat-icon class="back-button">arrow_forward_ios</mat-icon>
 			</button>
 		</div>
-		
 	</div>
 	<div class="image-container">
 		<div class="image-wrapper">
 			<img class="image-content" [src]="imageDetails.imageUrl" (error)="onImgError($event)" />
-		</div>
-		
+		</div>	
 	</div>
 	<div class="caption-container">
 		<p class="caption">{{imageDetails.title}}</p> 

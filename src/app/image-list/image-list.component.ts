@@ -1,13 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { ImageListService } from './image-list.service';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ViewportScroller } from '@angular/common';

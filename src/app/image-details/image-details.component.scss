@@ -1,23 +1,10 @@
-/*.mat-icon,
-.mat-icon-button {
-  font-size: 50px;
-  display: block;
-  height: 50px;
-  width: 50px;
-}
-
-.mat-icon-button i,
-.mat-icon-button,
-.mat-icon-button .mat-icon {
-  line-height: 50px;
-}*/
 .detail-container {
   height: 100vh;
   .button-container {
+    padding: 0.3rem 1rem;
     .nav-button-container {
       margin-left: auto;
     }
-
     display: flex;
     align-items: center;
     justify-content: space-around;
