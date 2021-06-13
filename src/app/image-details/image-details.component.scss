@@ -22,11 +22,16 @@
   align-items: center;
   justify-content: space-around;
   .image-wrapper {
+    flex: 0 0 auto;
     .image-content {
       height: calc(100vh - 150px);
-      width: calc(80vw);
+      width: calc(70vw);
       object-fit: contain;
       filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
     }
   }
+}
+
+.nav-button {
+  flex: 0 1 auto;
 }

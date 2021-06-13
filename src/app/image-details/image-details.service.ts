@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import * as Constants from '../constants/';
-import { imageDetailsItem } from './image-details.component';
+import { ImageDetailsItem } from './image-details.component';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class ImageDetailsService {
-  private readonly _imageDetails$ = new Subject<imageDetailsItem>();
+  private readonly _imageDetails$ = new Subject<ImageDetailsItem>();
   private readonly _loadingDetails$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {}
@@ -24,7 +24,7 @@ export class ImageDetailsService {
     this.http
       .get(`${Constants.API_DETAILS_BASE_URL}${id}.json`)
       .subscribe((res: any) => {
-        let imageDetails: imageDetailsItem = {
+        let imageDetails: ImageDetailsItem = {
           title: res[0].data.children[0].data.title,
           imageUrl: res[0].data.children[0].data.url,
         };

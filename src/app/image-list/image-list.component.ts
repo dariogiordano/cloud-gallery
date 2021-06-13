@@ -11,11 +11,16 @@ import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { ImageListService } from './image-list.service';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ViewportScroller } from '@angular/common';
-export interface imageListItem {
+export interface ImageListItem {
   thumbUrl: string;
   imageUrl: string;
   title: string;
   id: string;
+}
+export interface SearchParameters {
+  filterValue: string;
+  isActive: boolean;
+  allFound: boolean;
 }
 
 @Component({
@@ -27,11 +32,18 @@ export interface imageListItem {
   },
 })
 export class ImageListComponent implements OnInit, OnDestroy {
+  searchParameters: SearchParameters = {
+    isActive: false,
+    allFound: false,
+    filterValue: '',
+  };
   columnNumber: number = 0;
+  largestColumnNumber: number = 0;
   hasScrolled = false;
-  list$ = new Observable<imageListItem[]>();
+  list$ = new Observable<ImageListItem[]>();
   loadingList$ = new Observable<boolean>();
   resizeTimeout: any;
+  searchParametersSubscription?: Subscription;
   constructor(
     private _service: ImageListService,
     private _ruler: ViewportRuler,
@@ -39,15 +51,21 @@ export class ImageListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.searchParametersSubscription =
+      this._service.searchParameters$.subscribe((res: SearchParameters) => {
+        this.searchParameters = res;
+      });
     this.list$ = this._service.imageList$;
     this.loadingList$ = this._service.loadingList$;
 
     this.changeColumnNumber(
       Math.floor(this._ruler.getViewportSize().width / 150)
     );
+
+    this.largestColumnNumber = this.columnNumber;
     this._service.getCloudImages(
       !this.hasScrolled,
-      this.columnNumber * 8,
+      this.columnNumber * 7,
       true
     );
   }
@@ -61,7 +79,15 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.searchParametersSubscription?.unsubscribe();
     this._service.scrollOffset = this._viewportScroller.getScrollPosition();
+  }
+
+  search() {
+    this.hasScrolled = false;
+    this.searchParameters.isActive = true;
+    this._service.setSearchParameters(this.searchParameters);
+    this._service.getCloudImages(true, this.columnNumber * 7, false);
   }
 
   onImgError(event: any) {
@@ -73,14 +99,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   onWindowResize(event: any) {
-    const previousColumnNumber = this.columnNumber;
-
     this.changeColumnNumber(Math.floor(event.target.innerWidth / 150));
-    if (this.columnNumber !== previousColumnNumber && !this.hasScrolled) {
+    if (this.columnNumber > this.largestColumnNumber && !this.hasScrolled) {
+      this.largestColumnNumber = this.columnNumber;
       this._service.setLoadingList(true);
       clearTimeout(this.resizeTimeout);
       this.resizeTimeout = setTimeout(
-        () => this._service.getCloudImages(true, this.columnNumber * 8, false),
+        () => this._service.getCloudImages(true, this.columnNumber * 7, false),
         500
       );
     }
@@ -88,10 +113,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   onScroll() {
     this.hasScrolled = true;
-
     this._service.getCloudImages(
       !this.hasScrolled,
-      this.columnNumber * 8,
+      this.columnNumber * 7,
       false
     );
   }

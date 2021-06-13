@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterEvent } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
-import { imageListItem } from '../image-list/image-list.component';
+import { ImageListItem } from '../image-list/image-list.component';
 import { ImageListService } from '../image-list/image-list.service';
 import { ImageDetailsService } from './image-details.service';
 
-export interface imageDetailsItem {
+export interface ImageDetailsItem {
   imageUrl: string;
   title: string;
 }
@@ -18,18 +18,17 @@ export interface imageDetailsItem {
 })
 export class ImageDetailsComponent implements OnInit, OnDestroy {
   loadingDetails$ = new Observable<boolean>();
-  imageDetails$ = new Observable<imageDetailsItem>();
+  imageDetails$ = new Observable<ImageDetailsItem>();
   prevId?: string;
   nextId?: string;
   id?: string;
   listSubscription?: Subscription;
   urlSubscription?: Subscription;
-  imageList: imageListItem[] = [];
+  imageList: ImageListItem[] = [];
   constructor(
     private _route: ActivatedRoute,
     private _service: ImageDetailsService,
-    private _listService: ImageListService,
-    private _router: Router
+    private _listService: ImageListService
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +38,7 @@ export class ImageDetailsComponent implements OnInit, OnDestroy {
     this.listSubscription = this._listService.imageList$
       .pipe(
         concatMap((res: any) => {
-          this.imageList = res as imageListItem[];
+          this.imageList = res as ImageListItem[];
 
           return this._route.pathFromRoot[1].url;
         })
