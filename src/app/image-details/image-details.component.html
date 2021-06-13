@@ -1,5 +1,5 @@
 <ng-template #loading><app-page-loader></app-page-loader></ng-template>
-<div *ngIf="(imageDetails$ | async) as imageDetails; else loading">
+<div class="detail-container" *ngIf="(imageDetails$ | async) as imageDetails; else loading">
 	<div class="button-container" >
 		<button matTooltip="Back to gallery" routerLink="/image-list" mat-icon-button color="primary" >
 			<mat-icon >arrow_back</mat-icon>

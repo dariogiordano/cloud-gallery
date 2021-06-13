@@ -11,40 +11,39 @@
 .mat-icon-button .mat-icon {
   line-height: 50px;
 }*/
+.detail-container {
+  height: 100vh;
+  .button-container {
+    .nav-button-container {
+      margin-left: auto;
+    }
 
-.button-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 50px;
-  padding: 0 1rem;
-}
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
 
-.image-container {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  .image-wrapper {
-    .image-content {
-      height: calc(100vh - 250px);
-      width: calc(70vw);
-      object-fit: contain;
-      filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
+  .image-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    .image-wrapper {
+      .image-content {
+        height: 80vh;
+        width: 90vw;
+        object-fit: contain;
+        filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
+      }
     }
   }
-}
 
-.nav-button-container {
-  margin-left: auto;
-}
-.caption-container {
-  display: flex;
-  height: 150px;
-  padding: 0 20px;
-  align-items: center;
-  justify-content: center;
-  .caption {
-    color: #666;
+  .caption-container {
+    display: flex;
+    padding: 0 1rem;
+    align-items: center;
+    justify-content: center;
+    .caption {
+      color: #666;
+    }
   }
 }
