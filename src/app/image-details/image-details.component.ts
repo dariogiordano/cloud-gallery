@@ -23,7 +23,6 @@ export class ImageDetailsComponent implements OnInit, OnDestroy {
   nextId?: string;
   id?: string;
   listSubscription?: Subscription;
-  urlSubscription?: Subscription;
   imageList: ImageListItem[] = [];
   constructor(
     private _route: ActivatedRoute,
@@ -34,18 +33,16 @@ export class ImageDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadingDetails$ = this._service.loadingDetails$;
     this.imageDetails$ = this._service.imageDetails$;
-
     this.listSubscription = this._listService.imageList$
       .pipe(
         concatMap((res: any) => {
           this.imageList = res as ImageListItem[];
-
           return this._route.pathFromRoot[1].url;
         })
       )
-      .subscribe((val) => {
+      .subscribe((url) => {
         this._service.unsetImageDetails();
-        this.id = val[1].path;
+        this.id = url[1].path;
         let index = this.imageList.findIndex((item) => item.id === this.id);
         if (this.imageList.length > 0 && index >= 0) {
           this.prevId = index > 0 ? this.imageList[index - 1].id : undefined;
@@ -60,7 +57,6 @@ export class ImageDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.listSubscription?.unsubscribe();
-    this.urlSubscription?.unsubscribe();
   }
 
   onImgError(event: any) {

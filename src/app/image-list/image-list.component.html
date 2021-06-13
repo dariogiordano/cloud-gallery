@@ -1,26 +1,34 @@
 
 <ng-template #loading><app-page-loader></app-page-loader></ng-template>
+<ng-template #clearSearchTemplate>
+  <mat-toolbar>
+		<h6 class="back-button">Searching keyword "{{searchParameters.filterValue}}"</h6> 
+    <button matTooltip="Clear search" (click)="clearSearch()" mat-icon-button color="primary" >
+      <mat-icon class="back-button">clear</mat-icon>
+    </button>
+	</mat-toolbar>
+</ng-template>
 <div *ngIf="(!(loadingList$ | async) || hasScrolled); else loading" >
-
-  <ng-template #empty>Empty...</ng-template>
-  <div class="search-container">
+  <ng-template #empty><div class="empty-container">Nothing found (sorry).</div></ng-template>
+  <div class="search-container" *ngIf="!searchParameters.isActive; else clearSearchTemplate" >
     <mat-form-field >
-     
-      <input  matInput [(ngModel)]="searchParameters.filterValue" placeholder="search...">
-     
-    
+      <input  matInput [(ngModel)]="searchParameters.filterValue" placeholder="search..." (keydown.enter)="search()">
     </mat-form-field>
-		<button [disabled]="searchParameters.filterValue.length===0" matTooltip="Back to gallery" (click)="search()" mat-icon-button color="primary" >
+		<button [disabled]="searchParameters.filterValue.length===0" matTooltip="Search" (click)="search()" mat-icon-button color="primary" >
 			<mat-icon class="back-button">search</mat-icon>
 		</button>
-		
-		
 	</div>
   <mat-grid-list infiniteScroll
   [infiniteScrollDistance]="1"
   [infiniteScrollThrottle]="100"
   (scrolled)="onScroll()" [cols]="columnNumber" rowHeight="1:1" *ngIf="(list$ | async)?.length; else empty">
-    <mat-grid-tile *ngFor="let item of list$ | async"><a class="image-container" [routerLink]="['/dialog',item.id]" appMaterialElevation [defaultElevation]=0 [raisedElevation]=4><img class="list-item" [src]="item.thumbUrl" (error)="onImgError($event)" /></a></mat-grid-tile>
-    <mat-grid-tile *ngIf="(loadingList$ |async) && hasScrolled"><mat-spinner></mat-spinner></mat-grid-tile>
+    <mat-grid-tile *ngFor="let item of list$ | async">
+      <a class="image-container" [routerLink]="['/dialog',item.id]" appMaterialElevation [defaultElevation]=0 [raisedElevation]=4>
+        <img class="list-item" [src]="item.thumbUrl" (error)="onImgError($event)" />
+      </a>
+    </mat-grid-tile>
+    <mat-grid-tile *ngIf="(loadingList$ |async) && hasScrolled">
+      <mat-spinner></mat-spinner>
+    </mat-grid-tile>
   </mat-grid-list>
 </div>

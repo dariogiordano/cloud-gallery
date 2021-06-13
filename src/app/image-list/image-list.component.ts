@@ -86,6 +86,18 @@ export class ImageListComponent implements OnInit, OnDestroy {
   search() {
     this.hasScrolled = false;
     this.searchParameters.isActive = true;
+    this.searchParameters.allFound = false;
+    this._service.setSearchParameters(this.searchParameters);
+    this._service.getCloudImages(true, this.columnNumber * 7, false);
+  }
+
+  clearSearch() {
+    this.hasScrolled = false;
+    this.searchParameters = {
+      allFound: false,
+      isActive: false,
+      filterValue: '',
+    };
     this._service.setSearchParameters(this.searchParameters);
     this._service.getCloudImages(true, this.columnNumber * 7, false);
   }
@@ -100,7 +112,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   onWindowResize(event: any) {
     this.changeColumnNumber(Math.floor(event.target.innerWidth / 150));
-    if (this.columnNumber > this.largestColumnNumber && !this.hasScrolled) {
+    if (
+      this.columnNumber > this.largestColumnNumber &&
+      !this.hasScrolled &&
+      !this.searchParameters.allFound
+    ) {
       this.largestColumnNumber = this.columnNumber;
       this._service.setLoadingList(true);
       clearTimeout(this.resizeTimeout);

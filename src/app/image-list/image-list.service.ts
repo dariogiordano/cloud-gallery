@@ -17,7 +17,6 @@ export class ImageListService {
     isActive: false,
   });
   private _after?: string;
-
   private _intLoadingState = false;
   constructor(private http: HttpClient) {}
 
@@ -26,13 +25,13 @@ export class ImageListService {
    * @param isReset
    * @param limit
    * @param useCache
-   * @param filter
    */
   getCloudImages(isReset: boolean, limit: number, useCache?: boolean): void {
     // _intLoadingState is a private variable that tells whether a fetching is active or not. if so, the method won't run another one
     // if the input param useCache is on and there are stored images already, then I know that the subject related to the list will dispatch them some how, so i return
     if (
       this._intLoadingState ||
+      this._searchParameters$.getValue().allFound ||
       (useCache && this._imageList$.getValue().length > 0)
     ) {
       return;
@@ -59,8 +58,15 @@ export class ImageListService {
       return this.http.get(Constants.API_URL, { params }).pipe(
         tap((res: any) => {
           //set the new "after"
-
           this._after = res.data.after;
+          // allfound in searchParameters means that all the images with the given filter has been fetched
+
+          const allFound = this._after === null;
+          //emit a new searchParameters in order for the list component to know whether to fetch more images with infinite scroll or not or not.
+          this._searchParameters$.next({
+            ...this._searchParameters$.getValue(),
+            allFound,
+          });
           let filteredlist: any[] = res.data.children.filter(
             (resItem: any) =>
               !!resItem.data.url &&
@@ -87,13 +93,7 @@ export class ImageListService {
               return listItem;
             }
           );
-
           this._imageList$.next([...this._imageList$.value, ...imagelist]);
-          /*if () {
-  this.getCloudImages(isReset, limit);
-} else {
- 
-}*/
         })
       );
     };
@@ -104,6 +104,10 @@ export class ImageListService {
           if (this._imageList$.getValue().length < limit && this._after) {
             return fetchImages();
           } else {
+            console.log(
+              '.this._searchParameters$.getValue()',
+              this._searchParameters$.getValue()
+            );
             this._intLoadingState = false;
             this._loadingList$.next(false);
             return EMPTY;
